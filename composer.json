@@ -14,7 +14,7 @@
     ],
     "minimum-stability": "dev",
     "require": {},
-        "extra": {
+    "extra": {
         "laravel": {
             "providers": [
                 "Vikasrinvi\\LaravelBugWatcher\\LaravelBugWatcherServiceProvider"

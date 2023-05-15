@@ -12,8 +12,8 @@ return [
         'globalThrottle' => true,
         'globalThrottleLimit' => 20,
         'globalThrottleDurationMinutes' => 30,
-        'toEmailAddress' => 'fjwebfw@wejfew.com',
-        'fromEmailAddress' => 'fhbewfh@fwje.com',
-        'emailSubject' => 'fjebwffw@fbwej.com'
+        'toEmailAddress' => null,
+        'fromEmailAddress' => null,
+        'emailSubject' => config('app.name'). " :- Error Occured ";
     ]
 ];
