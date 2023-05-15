@@ -1,0 +1,17 @@
+{
+    "name": "vikasrinvi/laravel-bug-watcher",
+    "description": "to send the mail when error occured",
+    "autoload": {
+        "psr-4": {
+            "Vikasrinvi\\LaravelBugWatcher\\": "scr/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vikas Rinvi",
+            "email": "vikas.rinvi@cubettech.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
