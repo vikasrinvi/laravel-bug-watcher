@@ -30,7 +30,7 @@ After updating composer, add the service provider to the providers array in conf
 > If you are in laravel >= 5.5 you can skip adding the provider to config/app.php as it will be auto-discovered
 
 ```php
-Abrigham\LaravelEmailExceptions\EmailExceptionsServiceProvider::class,
+Vikasrinvi\LaravelBugWatcher\LaravelBugWatcherServiceProvider::class,
 ```
 
 Then in app/Exceptions/Handler.php replace
