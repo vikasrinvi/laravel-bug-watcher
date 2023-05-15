@@ -13,7 +13,7 @@ class LaravelBugWatcherServiceProvider extends ServiceProvider
             __DIR__.'/config/laravel-bug-watcher.php' => config_path('laravel-bug-watcher.php'),
         ], 'config');
         $this->publishes([
-            __DIR__.'/views' => resource_path('views/vendor/LaravelBugWatcher'),
+            __DIR__.'/views' => resource_path('views/vendor/laravel-bug-watcher'),
         ], 'views');
     }
     

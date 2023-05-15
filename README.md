@@ -43,13 +43,21 @@ use Vikasrinvi\LaravelBugWatcher\ErrorHandler as ExceptionHandler;
 ```
 
 ## Configuration
-To publish the config file and view run the following command
+To publish the config file
+
 ```bash
-php artisan vendor:publish --provider="Vikasrinvi\LaravelBugWatcher\LaravelBugWatcherServiceProvider"
+php artisan vendor:publish --provider="Vikasrinvi\LaravelBugWatcher\LaravelBugWatcherServiceProvider" --tag="config"
+```
+That will create a config file for you in config/laravel-bug-watcher.php 
+
+
+
+To publish the view run the following command (Optional) If you want to modify the view
+```bash
+php artisan vendor:publish --provider="php artisan vendor:publish --provider="Vikasrinvi\LaravelBugWatcher\LaravelBugWatcherServiceProvider" --tag="views"
 ```
 
-That will create a config file for you in config/LaravelBugWatcher.php and a view in
-resources/views/vendor/LaravelBugWatcher/emailExceptions.blade.php
+
 
 Default configuration:
 ```php
