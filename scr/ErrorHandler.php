@@ -63,13 +63,13 @@ class ErrorHandler extends ExceptionHandler
     protected function shouldMail(Throwable $exception)
     {
         // if emailing is turned off in the config
-        if (config('LaravelBugWatcher.ErrorEmail.email') != true ||
+        if (config('laravel-bug-watcher.ErrorEmail.email') != true ||
 
             // if we dont have an email address to mail to
-            !config('LaravelBugWatcher.ErrorEmail.toEmailAddress', 'mail.from.address') ||
+            !config('laravel-bug-watcher.ErrorEmail.toEmailAddress', 'mail.from.address') ||
 
             // if we dont have an email address to mail from
-            !config('LaravelBugWatcher.ErrorEmail.fromEmailAddress', 'mail.from.address') ||
+            !config('laravel-bug-watcher.ErrorEmail.fromEmailAddress', 'mail.from.address') ||
 
             $this->shouldntReport($exception) ||
 
@@ -115,18 +115,18 @@ class ErrorHandler extends ExceptionHandler
     {
         $data = [
             'exception' => $exception,
-            'toEmail' => config('LaravelBugWatcher.ErrorEmail.toEmailAddress', 'mail.from.address'),
-            'fromEmail' => config('LaravelBugWatcher.ErrorEmail.fromEmailAddress', 'mail.from.address'),
+            'toEmail' => config('laravel-bug-watcher.ErrorEmail.toEmailAddress', 'mail.from.address'),
+            'fromEmail' => config('laravel-bug-watcher.ErrorEmail.fromEmailAddress', 'mail.from.address'),
         ];
 
-        Mail::send('emailException', $data, function ($message) {
+        Mail::send('laravel-bug-watcher::emailException', $data, function ($message) {
 
             $default = 'An Exception has been thrown on '.
                 config('app.name', 'unknown').' ('.config('app.env', 'unknown').')';
-            $subject = config('LaravelBugWatcher.ErrorEmail.emailSubject') ?: $default;
+            $subject = config('laravel-bug-watcher.ErrorEmail.emailSubject') ?: $default;
 
-            $message->from(config('LaravelBugWatcher.ErrorEmail.fromEmailAddress', 'mail.from.address'))
-                ->to(config('LaravelBugWatcher.ErrorEmail.toEmailAddress', 'mail.from.address'))
+            $message->from(config('laravel-bug-watcher.ErrorEmail.fromEmailAddress', 'mail.from.address'))
+                ->to(config('laravel-bug-watcher.ErrorEmail.toEmailAddress', 'mail.from.address'))
                 ->subject($subject);
         });
     }
@@ -140,28 +140,28 @@ class ErrorHandler extends ExceptionHandler
     protected function globalThrottle()
     {
         // check if global throttling is turned on
-        if (config('LaravelBugWatcher.ErrorEmail.globalThrottle') == false) {
+        if (config('laravel-bug-watcher.ErrorEmail.globalThrottle') == false) {
             // no need to throttle since global throttling has been disabled
             return false;
         } else {
             // if we have a cache key lets determine if we are over the limit or not
             if (Cache::store(
-                config('LaravelBugWatcher.ErrorEmail.throttleCacheDriver')
+                config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
             )->has($this->globalThrottleCacheKey)
             ) {
                 // if we are over the limit return true since this should be throttled
                 if (Cache::store(
-                    config('LaravelBugWatcher.ErrorEmail.throttleCacheDriver')
+                    config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
                 )->get(
                     $this->globalThrottleCacheKey,
                     0
-                ) >= config('LaravelBugWatcher.ErrorEmail.globalThrottleLimit')
+                ) >= config('laravel-bug-watcher.ErrorEmail.globalThrottleLimit')
                 ) {
                     return true;
                 } else {
                     // else lets increment the cache key and return false since its not time to throttle yet
                     Cache::store(
-                        config('LaravelBugWatcher.ErrorEmail.throttleCacheDriver')
+                        config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
                     )->increment($this->globalThrottleCacheKey);
 
                     return false;
@@ -169,12 +169,12 @@ class ErrorHandler extends ExceptionHandler
             } else {
                 // we didn't find an item in cache lets put it in the cache
                 Cache::store(
-                    config('LaravelBugWatcher.ErrorEmail.throttleCacheDriver')
+                    config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
                 )->put(
                     $this->globalThrottleCacheKey,
                     1,
                     $this->getDateTimeMinutesFromNow(
-                        config('LaravelBugWatcher.ErrorEmail.globalThrottleDurationMinutes')
+                        config('laravel-bug-watcher.ErrorEmail.globalThrottleDurationMinutes')
                     )
                 );
 
@@ -194,7 +194,7 @@ class ErrorHandler extends ExceptionHandler
     protected function throttle(Throwable $exception)
     {
         // if throttling is turned off or its in the dont throttle list we won't throttle this exception
-        if (config('LaravelBugWatcher.ErrorEmail.throttle') == false ||
+        if (config('laravel-bug-watcher.ErrorEmail.throttle') == false ||
             $this->isInDontThrottleList($exception)
         ) {
             // report that we do not need to throttle
@@ -202,7 +202,7 @@ class ErrorHandler extends ExceptionHandler
         } else {
             // else lets check if its been reported within the last throttle period
             if (Cache::store(
-                config('LaravelBugWatcher.ErrorEmail.throttleCacheDriver')
+                config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
             )->has($this->getThrottleCacheKey($exception))
             ) {
                 // if its in the cache we need to throttle
@@ -210,12 +210,12 @@ class ErrorHandler extends ExceptionHandler
             } else {
                 // its not in the cache lets add it to the cache
                 Cache::store(
-                    config('LaravelBugWatcher.ErrorEmail.throttleCacheDriver')
+                    config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
                 )->put(
                     $this->getThrottleCacheKey($exception),
                     true,
                     $this->getDateTimeMinutesFromNow(
-                        config('LaravelBugWatcher.ErrorEmail.throttleDurationMinutes')
+                        config('laravel-bug-watcher.ErrorEmail.throttleDurationMinutes')
                     )
                 );
 
@@ -281,7 +281,7 @@ class ErrorHandler extends ExceptionHandler
      */
     protected function isInDontThrottleList(Throwable $exception)
     {
-        $dontThrottleList = config('LaravelBugWatcher.ErrorEmail.dontThrottle');
+        $dontThrottleList = config('laravel-bug-watcher.ErrorEmail.dontThrottle');
 
         return $this->isInList($dontThrottleList, $exception);
     }
@@ -294,7 +294,7 @@ class ErrorHandler extends ExceptionHandler
      */
     protected function isInDontEmailList(Throwable $exception)
     {
-        $dontEmailList = config('LaravelBugWatcher.ErrorEmail.dontEmail');
+        $dontEmailList = config('laravel-bug-watcher.ErrorEmail.dontEmail');
 
         return $this->isInList($dontEmailList, $exception);
     }

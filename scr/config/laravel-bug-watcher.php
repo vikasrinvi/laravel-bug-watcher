@@ -14,6 +14,6 @@ return [
         'globalThrottleDurationMinutes' => 30,
         'toEmailAddress' => null,
         'fromEmailAddress' => null,
-        'emailSubject' => config('app.name'). " :- Error Occured ";
+        'emailSubject' => config('app.name'). " :- Error Occured "
     ]
 ];
