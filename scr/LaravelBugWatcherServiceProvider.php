@@ -10,7 +10,7 @@ class LaravelBugWatcherServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/LaravelBugWatcher.php' => config_path('LaravelBugWatcher.php'),
+            __DIR__.'/config/laravel-bug-watcher.php' => config_path('laravel-bug-watcher.php'),
         ], 'config');
         $this->publishes([
             __DIR__.'/views' => resource_path('views/vendor/LaravelBugWatcher'),
@@ -22,7 +22,7 @@ class LaravelBugWatcherServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/views', 'laravel-bug-watcher');
         $this->mergeConfigFrom(
-            __DIR__.'/config/LaravelBugWatcher.php',
+            __DIR__.'/config/laravel-bug-watcher.php',
             'laravel-bug-watcher'
         );
 
