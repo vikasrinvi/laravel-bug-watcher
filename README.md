@@ -109,19 +109,7 @@ by modifying your view in **resources/views/vendor/laravelEmailExceptions/emailE
 If you need more complicated logic then just checking instanceof against the thrown exception
 there is a convenient hook for adding arbitrary logic to decide if an exception should be emailed.
 
-In **app/Exceptions/Handler.php** implement the function appSpecificDontEmail(Exception $exception) ex.
 
-```php
-<?php
-class Handler extends ExceptionHandler
-{
-    protected function appSpecificDontEmail(Exception $exception)
-    {
-        // add logic here to determine if exception should be emailed return true
-        // if it should and return false if it should not
-    }
-}
-```
 ## Gotchas
 If you're having trouble getting this working first make sure you have configured your
 application to send mail correctly. One of the easiest ways to get mail up and running 
