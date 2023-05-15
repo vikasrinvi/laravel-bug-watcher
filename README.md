@@ -19,3 +19,5 @@ This is package is made for the developer. It sends the error message in email w
 - Laravel >= 9.0
 
 ## Installation
+
+- composer require vikasrinvi/laravel-bug-watcher
