@@ -12,6 +12,7 @@ This is package is made for the developer. It sends the error message in email w
 ## Future Scope
 
 - Can be integrated with the AI like chatgpt to which can provide the optimum solution for the bug.
+- We can store the error log and create a UI with some route so that all the previous bug on the system can be tracked
 
 ## Requirements
 
@@ -85,7 +86,7 @@ Default configuration:
 * throttleDurationMinutes (int) - The duration in minutes of the global throttle for example if you put in 30 and have 10 for your globalThrottleLimit when the first email is sent out a 30 minute timer will commence once you reach the 10 email threshold no more emails will go out for that 30 minute period. 
 * toEmailAddress (string|array) - The email(s) to send the exceptions emails to such as the dev team dev@yoursite.com
 * fromEmailAddress (string) - The email address these emails should be sent from such as noreply@yoursite.com.
-* emailSubject (string) - The subject of email, leave NULL to use default Default Subject: An Exception has been thrown on APP_URL APP_ENV
+* emailSubject (string) - The subject of email, leave NULL to use default Default Subject: Error Occured  config('app.name', 'unknown').' ('.config('app.env', 'unknown').')'
 
 **Note:** the dontReport variable from **app/Exceptions/Handler.php** file will also not be emailed as it's assumed if they are not important enough to log then they also are not important enough to email
 
