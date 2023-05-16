@@ -12,7 +12,7 @@
             "email": "vikas.rinvi@cubettech.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "1.5",
     "require": {},
     "extra": {
         "laravel": {
