@@ -54,14 +54,16 @@
                                     {{ $exception->getCode() }}
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <strong>User Logged in:</strong>
-                                </td>
-                                <td>
-                                    {{ $user->id ?? 'None' }}
-                                </td>
-                            </tr>
+                            @if($user)
+                                <tr>
+                                    <td>
+                                        <strong>User Logged in:</strong>
+                                    </td>
+                                    <td>
+                                        {{ $user->id ?? 'None' }}
+                                    </td>
+                                </tr>
+                            @endif
                         </table>
                         <hr style="color: #f6f6f6;">
                         <table align="center" style="text-align: center;" border="0" cellspacing="0" cellpadding="0">

@@ -118,12 +118,12 @@ class ErrorHandler extends ExceptionHandler
             'exception' => $exception,
             'toEmail' => config('laravel-bug-watcher.ErrorEmail.toEmailAddress', 'mail.from.address'),
             'fromEmail' => config('laravel-bug-watcher.ErrorEmail.fromEmailAddress', 'mail.from.address'),
-            'user' => Auth::user();
+            'user' => Auth::user(),
         ];
 
         Mail::send('laravel-bug-watcher::emailException', $data, function ($message) {
-
-            $default = 'An Exception has been thrown on '.
+            
+            $default = 'Error Occured '.
                 config('app.name', 'unknown').' ('.config('app.env', 'unknown').')';
             $subject = config('laravel-bug-watcher.ErrorEmail.emailSubject') ?: $default;
 
