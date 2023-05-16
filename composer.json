@@ -3,7 +3,8 @@
     "description": "to send the mail when error occured",
     "autoload": {
         "psr-4": {
-            "Vikasrinvi\\LaravelBugWatcher\\": "scr/"
+            "Vikasrinvi\\LaravelBugWatcher\\": "scr/",
+            "Vikasrinvi\\LaravelBugWatcher\\Tests\\": "tests"
         }
     },
     "authors": [
@@ -13,12 +14,21 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
     "extra": {
         "laravel": {
             "providers": [
                 "Vikasrinvi\\LaravelBugWatcher\\LaravelBugWatcherServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "pestphp/pest": "2.x-dev",
+        "orchestra/testbench": "dev-develop"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+        
     }
 }
