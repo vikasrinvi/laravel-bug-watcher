@@ -12,7 +12,7 @@ This is package is made for the developer. It sends the error message in email w
 ## Future Scope
 
 - Can be integrated with the AI like chatgpt to which can provide the optimum solution for the bug.
-- We can store the error log and create a UI with some route so that all the previos bug on the system can be tracked
+- We can store the error log and create a UI with some route so that all the previous bug on the system can be tracked
 
 ## Requirements
 
