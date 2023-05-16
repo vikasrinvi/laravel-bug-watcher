@@ -8,6 +8,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Cache;
 use Mail;
 use Throwable;
+use Illuminate\Support\Facades\Auth;
 
 class ErrorHandler extends ExceptionHandler
 {
@@ -117,6 +118,7 @@ class ErrorHandler extends ExceptionHandler
             'exception' => $exception,
             'toEmail' => config('laravel-bug-watcher.ErrorEmail.toEmailAddress', 'mail.from.address'),
             'fromEmail' => config('laravel-bug-watcher.ErrorEmail.fromEmailAddress', 'mail.from.address'),
+            'user' => Auth::user();
         ];
 
         Mail::send('laravel-bug-watcher::emailException', $data, function ($message) {
