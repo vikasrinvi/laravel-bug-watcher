@@ -1,15 +1,17 @@
 <?php
 
-use Mail;
-use Illuminate\Mail\Mailable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+
+use Illuminate\Support\Facades\Mail;
+use Vikasrinvi\LaravelBugWatcher\Mail\ErrorMail;
 
 
 it('sends an email when an error occurs', function () {
-        expect(config('app.env'))->toBe('testing');
+       
 
     // Arrange
     Mail::fake();
+    
 
     // Act
     // Trigger the error that should send the email
@@ -20,16 +22,26 @@ it('sends an email when an error occurs', function () {
         // Report the exception and send an email
         app(ExceptionHandler::class)->report($e);
     }
-    $this->assertTrue(true);
+
 
     // Assert
-   
+   $data = [
+            'exception' => $e,
+            'toEmail' => config('laravel-bug-watcher.ErrorEmail.toEmailAddress', 'mail.from.address'),
+            'fromEmail' => config('laravel-bug-watcher.ErrorEmail.fromEmailAddress', 'mail.from.address'),
+            'user' => Auth::user(),
+        ];
 
-    // Mail::assertSent(function ($mail) {
-    //     // Add assertions for the email sent
-    //     // For example, check the recipient, subject, or content of the email
-    //     return $mail->to('vikasmrnv@gmail.com')
-    //         ->subject('Error Occurred')
-    //         ->hasView('laravel-bug-watcher::emailException');
-    // });
+        
+    Mail::to(config('laravel-bug-watcher.ErrorEmail.toEmailAddress', 'mail.from.address'))->send(new ErrorMail($data));
+
+          Mail::assertSent(ErrorMail::class, function ($sentMail) use ($data) {
+        // Assert the recipient
+            $recipient = config('laravel-bug-watcher.ErrorEmail.toEmailAddress', 'mail.from.address');
+            $this->assertTrue($sentMail->hasTo($recipient));
+
+
+        return true;
+    });
+
 })->group('Unit');

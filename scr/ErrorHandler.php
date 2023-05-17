@@ -5,10 +5,11 @@ namespace Vikasrinvi\LaravelBugWatcher;
 use App\Mail\WelcomeEmail;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Mail;
 use Throwable;
-use Illuminate\Support\Facades\Auth;
+use Vikasrinvi\LaravelBugWatcher\Mail\ErrorMail;
 
 class ErrorHandler extends ExceptionHandler
 {
@@ -33,6 +34,7 @@ class ErrorHandler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
+
         // check if we should mail this exception
         if ($this->shouldMail($exception)) {
             // if we passed our validation lets mail the exception
@@ -120,17 +122,8 @@ class ErrorHandler extends ExceptionHandler
             'fromEmail' => config('laravel-bug-watcher.ErrorEmail.fromEmailAddress', 'mail.from.address'),
             'user' => Auth::user(),
         ];
+        Mail::send(new ErrorMail($data));
 
-        Mail::send('laravel-bug-watcher::emailException', $data, function ($message) {
-            
-            $default = 'Error Occured '.
-                config('app.name', 'unknown').' ('.config('app.env', 'unknown').')';
-            $subject = config('laravel-bug-watcher.ErrorEmail.emailSubject') ?: $default;
-
-            $message->from(config('laravel-bug-watcher.ErrorEmail.fromEmailAddress', 'mail.from.address'))
-                ->to(config('laravel-bug-watcher.ErrorEmail.toEmailAddress', 'mail.from.address'))
-                ->subject($subject);
-        });
     }
 
     /**
