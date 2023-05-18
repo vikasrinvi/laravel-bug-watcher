@@ -40,9 +40,76 @@ class ErrorHandler extends ExceptionHandler
             // if we passed our validation lets mail the exception
             $this->mailException($exception);
         }
+        if($this->shouldCreateTask()){
+            $this->creatTask($exception);
+        }
 
         // run the parent report (logs exception and all that good stuff)
         $this->callParentReport($exception);
+    }
+
+    public function shouldCreateTask()
+    {
+        if(!config('laravel-bug-watcher.clickup.token')){
+            return false;
+        }
+        return true;
+    }
+
+    public function creatTask($exception)
+    {
+
+        $token = config('laravel-bug-watcher.clickup.token');
+        $listId = 900200829019;
+        $query = array(
+          
+        );
+
+        $curl = curl_init();
+
+        $payload = array(
+          "name" => "New Task Name",
+          "description" => "New Task Description",
+          "assignees" => array(
+            
+          ),
+          "tags" => array(
+            "bug"
+          ),
+          "status" => "BACKLOG",
+          "priority" => 3,
+          "due_date" => 1508369194377,
+          "due_date_time" => false,
+          "time_estimate" => 8640000,
+          "start_date" => 1567780450202,
+          "start_date_time" => false,
+          "notify_all" => true,
+          "parent" => NULL,
+          "links_to" => NULL,
+          
+        );
+
+        curl_setopt_array($curl, [
+          CURLOPT_HTTPHEADER => [
+            "Authorization: $token",
+            "Content-Type: application/json"
+          ],
+          CURLOPT_POSTFIELDS => json_encode($payload),
+          CURLOPT_URL => "https://api.clickup.com/api/v2/list/" . $listId . "/task?" . http_build_query($query),
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_CUSTOMREQUEST => "POST",
+        ]);
+
+        $response = curl_exec($curl);
+        $error = curl_error($curl);
+
+        curl_close($curl);
+        dd($response, json_decode($response, true));
+        if ($error) {
+          echo "cURL Error #:" . $error;
+        } else {
+          echo $response;
+        }
     }
 
     /**

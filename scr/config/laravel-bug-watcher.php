@@ -15,5 +15,8 @@ return [
         'toEmailAddress' => null,
         'fromEmailAddress' => null,
         'emailSubject' => config('app.name'). " :- Error Occured "
+    ],
+    'ClickUp' =>[
+        'token' => null,
     ]
 ];
