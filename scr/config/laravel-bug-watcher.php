@@ -17,6 +17,7 @@ return [
         'emailSubject' => config('app.name'). " :- Error Occured "
     ],
     'ClickUp' =>[
+        'createTask' => true,
         'token' => null,
     ]
 ];
