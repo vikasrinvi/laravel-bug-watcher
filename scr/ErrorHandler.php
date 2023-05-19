@@ -51,7 +51,12 @@ class ErrorHandler extends ExceptionHandler
 
     public function shouldCreateTask($exception)
     {
-        if(!config('laravel-bug-watcher.ClickUp.creatTask') || !config('laravel-bug-watcher.ClickUp.token')){
+        if(!config('laravel-bug-watcher.ClickUp.creatTask') || !config('laravel-bug-watcher.ClickUp.token') || 
+        // if the exception has already been mailed within the last throttle period
+            $this->throttle($exception) ||
+
+            // if we've already sent the maximum amount of emails for the global throttle period
+            $this->globalThrottle() || $this->shouldntReport($exception)){
             return false;
         }
         return true;
