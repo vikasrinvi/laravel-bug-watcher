@@ -19,5 +19,9 @@ return [
     'ClickUp' =>[
         'createTask' => true,
         'token' => null,
+        'folder_name' =>null,
+        'folder_id' => null,
+        'list_name' => null,
+        'list_id' => null
     ]
 ];
