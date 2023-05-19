@@ -9,10 +9,10 @@ trait ClickupTrait
     public function create($exception)
     {
 
-
+        config('laravel-bug-watcher.ClickUp.token')
            $start_date =strtotime(now()) * 1000 ;
             // dd(now(), $start_date);
-            $due_date =strtotime(now(+1)) * 1000 ;
+          $due_date =strtotime(now(+1)) * 1000 ;
           $listId = 900200829019;
           
             $query = array(
