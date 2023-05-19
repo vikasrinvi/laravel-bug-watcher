@@ -18,7 +18,7 @@ return [
     ],
     'ClickUp' =>[
         'createTask' => true,
-        'token' => null,
+        'token' => env('CLICKUP_ACCESS_TOKEN', null),
         'folder_name' =>null,
         'folder_id' => null,
         'list_name' => null,

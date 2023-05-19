@@ -51,7 +51,7 @@ class ErrorHandler extends ExceptionHandler
 
     public function shouldCreateTask($exception)
     {
-        if(!config('laravel-bug-watcher.clickup.creatTask') || !config('laravel-bug-watcher.clickup.token')){
+        if(!config('laravel-bug-watcher.ClickUp.creatTask') || !config('laravel-bug-watcher.ClickUp.token')){
             return false;
         }
         return true;
