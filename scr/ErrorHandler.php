@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Mail;
 use Throwable;
-use Vikasrinvi\LaravelBugWatcher\ClickupTrait;
 use Vikasrinvi\LaravelBugWatcher\Mail\ErrorMail;
+use Vikasrinvi\LaravelBugWatcher\traits\ClickupTrait;
 
 class ErrorHandler extends ExceptionHandler
 {

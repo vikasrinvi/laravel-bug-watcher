@@ -1,6 +1,6 @@
 <?php
 
-namespace Vikasrinvi\LaravelBugWatcher;
+namespace Vikasrinvi\LaravelBugWatcher\traits;
 
 use Illuminate\Support\Facades\Auth;
 
