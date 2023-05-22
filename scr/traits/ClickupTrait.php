@@ -73,7 +73,7 @@ trait ClickupTrait
             }
         }
         if($listId){
-                      $start_date =strtotime(now()) * 1000 ;
+          $start_date =strtotime(now()) * 1000 ;
           $due_date =strtotime(now(+1)) * 1000 ;
 
           $listId = $listId;
@@ -128,7 +128,7 @@ trait ClickupTrait
 
         curl_close($curl);
         }
-
+    }
 
 
 }
