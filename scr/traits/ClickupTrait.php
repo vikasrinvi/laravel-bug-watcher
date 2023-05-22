@@ -9,12 +9,71 @@ trait ClickupTrait
     public function create($exception)
     {
 
-        config('laravel-bug-watcher.ClickUp.token');
-           $start_date =strtotime(now()) * 1000 ;
-            // dd(now(), $start_date);
+        $token =  config('laravel-bug-watcher.ClickUp.token');
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+          CURLOPT_HTTPHEADER => [
+            "Authorization: $token"
+          ],
+          CURLOPT_URL => "https://api.clickup.com/api/v2/team",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_CUSTOMREQUEST => "GET",
+        ]);
+
+        $response = curl_exec($curl);
+        $response = json_decode($response, true);
+
+        if(array_key_exists('teams', $response)){
+            $team = collect($response['teams'])->where('name', 'Cubet')->first();
+            if($team){
+                $teamId = $team['id'];
+            }
+        }
+
+
+        $teamId = $teamId;
+        $query = array(
+          "archived" => "false"
+        );
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+          CURLOPT_HTTPHEADER => [
+            "Authorization: $token"
+          ],
+          CURLOPT_URL => "https://api.clickup.com/api/v2/team/$teamId/folder",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_CUSTOMREQUEST => "GET",
+        ]);
+
+        $response = curl_exec($curl);
+        $response = json_decode($response, true);
+
+        if(array_key_exists('folders', $response)){
+            $folder = collect($response['folders'])->where('name', 'Laravel Package Test Project')->first();
+            if($folder && array_key_exists('lists', $folder)){
+
+                $list = collect($folder['lists'])->where('name', 'Bug Watcher Tasks')->first();
+
+                if(!$list){
+                    $list = collect($folder['lists'])->where('name', 'General')->first();
+                }
+
+                if($list){
+                    $listId = $list['id'];
+                }
+
+
+            }
+        }
+
+          $start_date =strtotime(now()) * 1000 ;
           $due_date =strtotime(now(+1)) * 1000 ;
 
-          $listId = 900200829019;
+          $listId = $listId;
           
             $query = array(
               
@@ -50,21 +109,21 @@ trait ClickupTrait
               "links_to" => NULL,
               
             );
-
             curl_setopt_array($curl, [
               CURLOPT_HTTPHEADER => [
                 "Authorization: $token",
                 "Content-Type: application/json"
               ],
               CURLOPT_POSTFIELDS => json_encode($payload),
-              CURLOPT_URL => "https://api.clickup.com/api/v2/list/" . $listId . "/task?" . http_build_query($query),
+              CURLOPT_URL => "https://api.clickup.com/api/v2/list/$listId/task?" . http_build_query($query),
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_CUSTOMREQUEST => "POST",
             ]);
-
             $response = curl_exec($curl);
-            $error = curl_error($curl);
 
-            curl_close($curl);
+        $error = curl_error($curl);
+
+        curl_close($curl);
+
 
 }
