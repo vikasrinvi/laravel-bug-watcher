@@ -3,11 +3,12 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-This is package is made for the developer. It sends the error message in email whenever there is any bug in the application.
+This is package is made for the developer. It sends the error message in email whenever there is any bug in the application and also create a clickup task in the clickup.
 
 ## Features
 
 - Send Email with the details of the bug.
+- Create a task in the clickUp with bug report
 
 ## Future Scope
 
@@ -20,7 +21,6 @@ This is package is made for the developer. It sends the error message in email w
 - Laravel >= 9.0
 
 ## Installation
-
 
 
 Run the following command
@@ -68,12 +68,31 @@ Default configuration:
       'toEmailAddress' => null,
       'fromEmailAddress' => null,
       'emailSubject' => config('app.name'). " :- Error Occured "
-]
+],
+ 'ClickUp' =>[
+     'createTask' => true,
+     'token' => env('CLICKUP_ACCESS_TOKEN', null),
+     'team_name' => env('CLICKUP_TEAM_NAME', null),
+     'folder_name' =>env('CLICKUP_FOlDER_NAME', null),
+     'folder_id' => env('CLICKUP_FOlDER_ID', null),
+     'list_name' => env('CLICKUP_LIST_NAME', null),
+     'list_id' => env('CLICKUP_LIST_ID', null)
+ ]
 ```
 
 
 ## Basic Usage
-#### Basic Config
+
+#### Basic Config of clickup task
+
+* createTask (bool) - Enable or disable creating task in the clickup.
+* token (string) - Token from the clickup
+* Team name (string) - Team name is the team in which the project is created we need to get it from the click, it it also the workspace name
+* Folder name (string) - This is the project name in the click up
+* list name - It is task parent of the task under which task will be created in the clickup
+**Important:** There should be a Status under the list call 'BACKLOG' and ther should a label create with the name 'bug.
+
+#### Basic Config of email
 
 * email (bool) - Enable or disable emailing of errors/exceptions
 * dontEmail (array) - This works exactly like laravel's $dontReport variable documented here: [https://laravel.com/docs/10.x/errors](https://laravel.com/docs/10.x/errors)]#the-exception-handler under Ignoring Exceptions By Type. Keep in mind also any exceptions under laravel's $dontReport also will not be emailed
@@ -86,7 +105,8 @@ Default configuration:
 * throttleDurationMinutes (int) - The duration in minutes of the global throttle for example if you put in 30 and have 10 for your globalThrottleLimit when the first email is sent out a 30 minute timer will commence once you reach the 10 email threshold no more emails will go out for that 30 minute period. 
 * toEmailAddress (string|array) - The email(s) to send the exceptions emails to such as the dev team dev@yoursite.com
 * fromEmailAddress (string) - The email address these emails should be sent from such as noreply@yoursite.com.
-* emailSubject (string) - The subject of email, leave NULL to use default Default Subject: Error Occured  config('app.name', 'unknown').' ('.config('app.env', 'unknown').')'
+
+* emailSubject (string) - The subject of email, leave NULL to use default Default Subject: Error Occured config('app.name', 'unknown').' ('.config('app.env', 'unknown').')'
 
 **Note:** the dontReport variable from **app/Exceptions/Handler.php** file will also not be emailed as it's assumed if they are not important enough to log then they also are not important enough to email
 
