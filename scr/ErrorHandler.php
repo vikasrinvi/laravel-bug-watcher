@@ -41,6 +41,7 @@ class ErrorHandler extends ExceptionHandler
             // if we passed our validation lets mail the exception
             $this->mailException($exception);
         }
+
         if($this->shouldCreateTask($exception)){
             $this->creatTask($exception);
         }
@@ -51,7 +52,10 @@ class ErrorHandler extends ExceptionHandler
 
     public function shouldCreateTask($exception)
     {
-        if(!config('laravel-bug-watcher.ClickUp.creatTask') || !config('laravel-bug-watcher.ClickUp.token') || !config('laravel-bug-watcher.ClickUp.folder_name') || !config('laravel-bug-watcher.ClickUp.list_name') ||
+        
+
+
+        if(!config('laravel-bug-watcher.ClickUp.createTask') || !config('laravel-bug-watcher.ClickUp.token') || !config('laravel-bug-watcher.ClickUp.team_name') || !config('laravel-bug-watcher.ClickUp.folder_name') || !config('laravel-bug-watcher.ClickUp.list_name') ||
         // if the exception has already been mailed within the last throttle period
             $this->throttle($exception) ||
 
