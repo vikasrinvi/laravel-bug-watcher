@@ -23,7 +23,6 @@ This is package is made for the developer. It sends the error message in email w
 ## Installation
 
 
-
 Run the following command
 ```bash
 composer require vikasrinvi/laravel-bug-watcher
