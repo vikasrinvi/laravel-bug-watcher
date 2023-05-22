@@ -10,6 +10,9 @@ trait ClickupTrait
     {
 
         $token =  config('laravel-bug-watcher.ClickUp.token');
+        $teamName =  config('laravel-bug-watcher.ClickUp.team_name');
+        $folderName =  config('laravel-bug-watcher.ClickUp.folder_name');
+        $listName =  config('laravel-bug-watcher.ClickUp.list_name');
 
         $curl = curl_init();
 
@@ -26,7 +29,7 @@ trait ClickupTrait
         $response = json_decode($response, true);
 
         if(array_key_exists('teams', $response)){
-            $team = collect($response['teams'])->where('name', 'Cubet')->first();
+            $team = collect($response['teams'])->where('name', $teamName)->first();
             if($team){
                 $teamId = $team['id'];
             }
@@ -53,10 +56,10 @@ trait ClickupTrait
         $response = json_decode($response, true);
 
         if(array_key_exists('folders', $response)){
-            $folder = collect($response['folders'])->where('name', 'Laravel Package Test Project')->first();
+            $folder = collect($response['folders'])->where('name', $folderName)->first();
             if($folder && array_key_exists('lists', $folder)){
 
-                $list = collect($folder['lists'])->where('name', 'Bug Watcher Tasks')->first();
+                $list = collect($folder['lists'])->where('name', $listName)->first();
 
                 if(!$list){
                     $list = collect($folder['lists'])->where('name', 'General')->first();
@@ -69,8 +72,8 @@ trait ClickupTrait
 
             }
         }
-
-          $start_date =strtotime(now()) * 1000 ;
+        if($listId){
+                      $start_date =strtotime(now()) * 1000 ;
           $due_date =strtotime(now(+1)) * 1000 ;
 
           $listId = $listId;
@@ -124,6 +127,8 @@ trait ClickupTrait
         $error = curl_error($curl);
 
         curl_close($curl);
+        }
+
 
 
 }
