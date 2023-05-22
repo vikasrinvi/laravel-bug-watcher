@@ -3,11 +3,12 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-This is package is made for the developer. It sends the error message in email whenever there is any bug in the application.
+This is package is made for the developer. It sends the error message in email whenever there is any bug in the application and also create a clickup task in the clickup.
 
 ## Features
 
 - Send Email with the details of the bug.
+- Create a task in the clickUp with bug report
 
 ## Future Scope
 
@@ -68,12 +69,31 @@ Default configuration:
       'toEmailAddress' => null,
       'fromEmailAddress' => null,
       'emailSubject' => config('app.name'). " :- Error Occured "
-]
+],
+ 'ClickUp' =>[
+     'createTask' => true,
+     'token' => env('CLICKUP_ACCESS_TOKEN', null),
+     'team_name' => env('CLICKUP_TEAM_NAME', null),
+     'folder_name' =>env('CLICKUP_FOlDER_NAME', null),
+     'folder_id' => env('CLICKUP_FOlDER_ID', null),
+     'list_name' => env('CLICKUP_LIST_NAME', null),
+     'list_id' => env('CLICKUP_LIST_ID', null)
+ ]
 ```
 
 
 ## Basic Usage
-#### Basic Config
+
+#### Basic Config of clickup task
+
+* createTask (bool) - Enable or disable creating task in the clickup.
+* token (string) - Token from the clickup
+* Team name (string) - Team name is the team in which the project is created we need to get it from the click, it it also the workspace name
+* Folder name (string) - This is the project name in the click up
+* list name - It is task parent of the task under which task will be created in the clickup
+**Important:** There should be a Status under the list call 'BACKLOG' and ther should a label create with the name 'bug.
+
+#### Basic Config of email
 
 * email (bool) - Enable or disable emailing of errors/exceptions
 * dontEmail (array) - This works exactly like laravel's $dontReport variable documented here: [https://laravel.com/docs/10.x/errors](https://laravel.com/docs/10.x/errors)]#the-exception-handler under Ignoring Exceptions By Type. Keep in mind also any exceptions under laravel's $dontReport also will not be emailed
