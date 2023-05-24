@@ -12,6 +12,7 @@ return [
         'globalThrottle' => true,
         'globalThrottleLimit' => 20,
         'globalThrottleDurationMinutes' => 30,
+<<<<<<< HEAD
         'toEmailAddress' => null,
         'fromEmailAddress' => null,
         'emailSubject' => config('app.name'). " :- Error Occured "
@@ -24,5 +25,10 @@ return [
         'folder_id' => env('CLICKUP_FOlDER_ID', null),
         'list_name' => env('CLICKUP_LIST_NAME', null),
         'list_id' => env('CLICKUP_LIST_ID', null)
+=======
+        'toEmailAddress' => 'fjwebfw@wejfew.com',
+        'fromEmailAddress' => 'fhbewfh@fwje.com',
+        'emailSubject' => 'fjebwffw@fbwej.com'
+>>>>>>> c57a1f3 (package discovery)
     ]
 ];
