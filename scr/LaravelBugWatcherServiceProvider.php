@@ -3,6 +3,10 @@
 namespace Vikasrinvi\LaravelBugWatcher;
 
 use Illuminate\Support\ServiceProvider;
+use Vikasrinvi\LaravelBugWatcher\Interface\BugWatcherInterface;
+use Vikasrinvi\LaravelBugWatcher\Interface\ClickupRepository;
+use Vikasrinvi\LaravelBugWatcher\Interface\TeamworkRepository;
+
 
 class LaravelBugWatcherServiceProvider extends ServiceProvider
 {
@@ -19,6 +23,9 @@ class LaravelBugWatcherServiceProvider extends ServiceProvider
     
     public function register()
     {
+ 
+        $this->app->bind(BugWatcherInterface::class, ClickupRepository::class);
+        $this->app->bind(BugWatcherInterface::class, TeamworkRepository::class);
 
         $this->loadViewsFrom(__DIR__.'/views', 'laravel-bug-watcher');
         $this->mergeConfigFrom(

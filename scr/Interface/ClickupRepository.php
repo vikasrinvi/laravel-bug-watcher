@@ -1,15 +1,18 @@
 <?php
 
-namespace Vikasrinvi\LaravelBugWatcher\interface;
+namespace Vikasrinvi\LaravelBugWatcher\Interface;
+
 
 use Illuminate\Support\Facades\Auth;
-use Vikasrinvi\LaravelBugWatcher\interface\BugWatcherInterface;
+use Vikasrinvi\LaravelBugWatcher\Interface\BugWatcherInterface;
 
 
-interface BugWatcherInterface implements BugWatcherInterface
+
+class ClickupRepository implements BugWatcherInterface
 {
-    public function createTask($exception)   {
 
+    public function createTask($exception)   
+    {
         $token =  config('laravel-bug-watcher.ClickUp.token');
         $teamName =  config('laravel-bug-watcher.ClickUp.team_name');
         $folderName =  config('laravel-bug-watcher.ClickUp.folder_name');
@@ -129,6 +132,7 @@ interface BugWatcherInterface implements BugWatcherInterface
 
         curl_close($curl);
         }
+
     }
 
 }

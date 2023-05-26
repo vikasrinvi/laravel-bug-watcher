@@ -1,6 +1,6 @@
 <?php
 
-namespace Vikasrinvi\LaravelBugWatcher\interface;
+namespace Vikasrinvi\LaravelBugWatcher\Interface;
 
 
 interface BugWatcherInterface
