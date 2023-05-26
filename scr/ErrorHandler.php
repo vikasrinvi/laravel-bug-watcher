@@ -4,17 +4,20 @@ namespace Vikasrinvi\LaravelBugWatcher;
 
 use App\Mail\WelcomeEmail;
 use Exception;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Mail;
 use Throwable;
+use Vikasrinvi\LaravelBugWatcher\Interface\BugWatcherInterface;
+use Vikasrinvi\LaravelBugWatcher\Interface\ClickupRepository;
+use Vikasrinvi\LaravelBugWatcher\Interface\TeamworkRepository;
 use Vikasrinvi\LaravelBugWatcher\Mail\ErrorMail;
-use Vikasrinvi\LaravelBugWatcher\traits\ClickupTrait;
 
 class ErrorHandler extends ExceptionHandler
 {
-    use ClickupTrait;
     /**
      * @var string global throttle cache key
      */
@@ -33,19 +36,35 @@ class ErrorHandler extends ExceptionHandler
      * @param Throwable $exception
      * @throws Exception
      */
+
+    protected $clickupRepository;
+
+    public function __construct() {
+
+        $platform = config('laravel-bug-watcher.platform'); // Replace this with your actual condition
+        
+        if ($platform =='team-work') {
+            $this->clickupRepository = App::make(TeamworkRepository::class);
+        } else {
+            $this->clickupRepository = App::make(ClickupRepository::class);
+        }
+
+
+    }
     public function report(Throwable $exception)
     {
 
-        // check if we should mail this exception
         if ($this->shouldMail($exception)) {
             // if we passed our validation lets mail the exception
             $this->mailException($exception);
         }
-
+        
         if($this->shouldCreateTask($exception)){
-            $this->creatTask($exception);
+            $this->clickupRepository->createTask($exception);
         }
-
+        if($this->shouldCreateTeamWorkTask($exception)){
+            $this->clickupRepository->createTask($exception);
+        }
         // run the parent report (logs exception and all that good stuff)
         $this->callParentReport($exception);
     }
@@ -56,6 +75,22 @@ class ErrorHandler extends ExceptionHandler
 
 
         if(!config('laravel-bug-watcher.ClickUp.createTask') || !config('laravel-bug-watcher.ClickUp.token') || !config('laravel-bug-watcher.ClickUp.team_name') || !config('laravel-bug-watcher.ClickUp.folder_name') || !config('laravel-bug-watcher.ClickUp.list_name') ||
+        // if the exception has already been mailed within the last throttle period
+            $this->throttle($exception) ||
+
+            // if we've already sent the maximum amount of emails for the global throttle period
+            $this->globalThrottle() || $this->shouldntReport($exception)){
+            return false;
+        }
+        return true;
+    }
+
+    public function shouldCreateTeamWorkTask($exception)
+    {
+        
+
+
+        if(!config('laravel-bug-watcher.TeamWork.createTask') || !config('laravel-bug-watcher.TeamWork.token') ||  !config('laravel-bug-watcher.TeamWork.folder_id') || !config('laravel-bug-watcher.TeamWork.list_id') ||
         // if the exception has already been mailed within the last throttle period
             $this->throttle($exception) ||
 

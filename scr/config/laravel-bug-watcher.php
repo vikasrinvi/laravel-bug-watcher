@@ -29,7 +29,7 @@ return [
     'TeamWork' =>[
         'createTask' => true,
         'token' => env('TEAMWORK_ACCESS_TOKEN', null),
-        'project_id' => env('CLICKUP_PROJECT_ID', null),
-        'list_id' => env('CLICKUP_LIST_ID', null)
+        'project_id' => 770389,      //integer
+        'list_id' => 2587112     //integer
     ]
 ];
