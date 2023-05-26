@@ -13,6 +13,14 @@ class LaravelBugWatcherServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $condition = config('laravel-bug-watcher.platform');// Your condition to determine which implementation to use
+
+        if ($condition == 'team-work') {
+           $this->app->bind(BugWatcherInterface::class, TeamworkRepository::class);
+        } else {
+            $this->app->bind(BugWatcherInterface::class, ClickupRepository::class);
+        }
+
         $this->publishes([
             __DIR__.'/config/laravel-bug-watcher.php' => config_path('laravel-bug-watcher.php'),
         ], 'config');
@@ -23,9 +31,7 @@ class LaravelBugWatcherServiceProvider extends ServiceProvider
     
     public function register()
     {
- 
-        $this->app->bind(BugWatcherInterface::class, ClickupRepository::class);
-        $this->app->bind(BugWatcherInterface::class, TeamworkRepository::class);
+        
 
         $this->loadViewsFrom(__DIR__.'/views', 'laravel-bug-watcher');
         $this->mergeConfigFrom(
