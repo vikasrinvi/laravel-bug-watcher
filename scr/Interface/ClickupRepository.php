@@ -17,7 +17,7 @@ class ClickupRepository implements BugWatcherInterface
         $teamName =  config('laravel-bug-watcher.ClickUp.team_name');
         $folderName =  config('laravel-bug-watcher.ClickUp.folder_name');
         $listName =  config('laravel-bug-watcher.ClickUp.list_name');
-
+        $teamId = NULL;
         $curl = curl_init();
 
         curl_setopt_array($curl, [
