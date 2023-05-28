@@ -3,12 +3,15 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-This is package is made for the developer. It sends the error message in email whenever there is any bug in the application and also create a clickup task in the clickup.
+This is package is made for the developer. 
+Whenever there is any bug in the application
+- It sends the error message in email to the developer/concern person
+- It create a task in the clickup/teamwork.
 
 ## Features
 
 - Send Email with the details of the bug.
-- Create a task in the clickUp with bug report
+- Create a task in the clickUp/teamwork with bug report
 
 ## Future Scope
 
@@ -21,7 +24,6 @@ This is package is made for the developer. It sends the error message in email w
 - Laravel >= 9.0
 
 ## Installation
-
 
 Run the following command
 ```bash
@@ -55,29 +57,37 @@ That will create a config file for you in config/laravel-bug-watcher.php
 
 Default configuration:
 ```php
-'ErrorEmail' => [
-      'email' => true,
-      'dontEmail' => [],
-      'throttle' => true,
-      'throttleCacheDriver' => env('CACHE_DRIVER', 'file'),
-      'throttleDurationMinutes' => 5,
-      'dontThrottle' => [],
-      'globalThrottle' => true,
-      'globalThrottleLimit' => 20,
-      'globalThrottleDurationMinutes' => 30,
-      'toEmailAddress' => null,
-      'fromEmailAddress' => null,
-      'emailSubject' => config('app.name'). " :- Error Occured "
-],
- 'ClickUp' =>[
-     'createTask' => true,
-     'token' => env('CLICKUP_ACCESS_TOKEN', null),
-     'team_name' => env('CLICKUP_TEAM_NAME', null),
-     'folder_name' =>env('CLICKUP_FOlDER_NAME', null),
-     'folder_id' => env('CLICKUP_FOlDER_ID', null),
-     'list_name' => env('CLICKUP_LIST_NAME', null),
-     'list_id' => env('CLICKUP_LIST_ID', null)
- ]
+
+    'platform' => 'click-up', // use team-work , click-up
+    'throttle' => true,
+    'throttleCacheDriver' => env('CACHE_DRIVER', 'file'),
+    'throttleDurationMinutes' => 5,
+    'dontThrottle' => [],
+    'globalThrottle' => true,
+    'globalThrottleLimit' => 20,
+    'globalThrottleDurationMinutes' => 30,
+    
+    'ErrorEmail' => [
+        'email' => true,
+        'dontEmail' => [],
+        'toEmailAddress' => null,
+        'fromEmailAddress' => null,
+        'emailSubject' => config('app.name'). " :- Error Occured "
+    ],
+    'ClickUp' =>[
+        'token' => env('CLICKUP_ACCESS_TOKEN', null),
+        'team_name' => env('CLICKUP_TEAM_NAME', 'Cubet'),
+        'folder_name' =>env('CLICKUP_FOlDER_NAME', 'Laravel Package Test Project'),
+        'folder_id' => env('CLICKUP_FOlDER_ID', null),
+        'list_name' => env('CLICKUP_LIST_NAME', 'General Tasks'),
+        'list_id' => env('CLICKUP_LIST_ID', null)
+    ],
+    'TeamWork' =>[
+        'token' => env('TEAMWORK_ACCESS_TOKEN', null),
+        'project_id' => env('TEAMWORK_PROJECT_ID', null),      //integer
+        'list_id' => env('TEAMWORK_LIST_ID', null)     //integer
+    ]
+
 ```
 
 
@@ -85,12 +95,20 @@ Default configuration:
 
 #### Basic Config of clickup task
 
-* createTask (bool) - Enable or disable creating task in the clickup.
+* platform (string) - mention `click-up` for creating task in the clickup.
 * token (string) - Token from the clickup
 * Team name (string) - Team name is the team in which the project is created we need to get it from the click, it it also the workspace name
 * Folder name (string) - This is the project name in the click up
 * list name - It is task parent of the task under which task will be created in the clickup
 **Important:** There should be a Status under the list call 'BACKLOG' and ther should a label create with the name 'bug.
+
+#### Basic Config of teamwork task
+
+* platform (string) - mention `team-work` for creating task in the teamwork.
+* token (string) - Token from the teamwork
+* project_id (integer) - Project id is the id of the project need to copy from the url of the project
+* list_id (integer) - list id is the list under which the task will be created
+
 
 #### Basic Config of email
 
