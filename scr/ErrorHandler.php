@@ -69,7 +69,7 @@ class ErrorHandler extends ExceptionHandler
 
     public function shouldCreateTask($exception)
     {
-        if(!config('laravel-bug-watcher.ClickUp.createTask') || !config('laravel-bug-watcher.ClickUp.token') || !config('laravel-bug-watcher.ClickUp.team_name') || !config('laravel-bug-watcher.ClickUp.folder_name') || !config('laravel-bug-watcher.ClickUp.list_name') ||
+        if((config('laravel-bug-watcher.platform') != 'click-up') || !config('laravel-bug-watcher.ClickUp.token') || !config('laravel-bug-watcher.ClickUp.team_name') || !config('laravel-bug-watcher.ClickUp.folder_name') || !config('laravel-bug-watcher.ClickUp.list_name') ||
         // if the exception has already been mailed within the last throttle period
             $this->throttle($exception) ||
 
@@ -84,8 +84,7 @@ class ErrorHandler extends ExceptionHandler
     {
         
 
-
-        if(!config('laravel-bug-watcher.TeamWork.createTask') || !config('laravel-bug-watcher.TeamWork.token') ||  !config('laravel-bug-watcher.TeamWork.folder_id') || !config('laravel-bug-watcher.TeamWork.list_id') ||
+        if((config('laravel-bug-watcher.platform') != 'team-work') || !config('laravel-bug-watcher.TeamWork.token') ||  !config('laravel-bug-watcher.TeamWork.folder_id') || !config('laravel-bug-watcher.TeamWork.list_id') ||
         // if the exception has already been mailed within the last throttle period
             $this->throttle($exception) ||
 
@@ -192,28 +191,28 @@ class ErrorHandler extends ExceptionHandler
     protected function globalThrottle()
     {
         // check if global throttling is turned on
-        if (config('laravel-bug-watcher.ErrorEmail.globalThrottle') == false) {
+        if (config('laravel-bug-watcher.globalThrottle') == false) {
             // no need to throttle since global throttling has been disabled
             return false;
         } else {
             // if we have a cache key lets determine if we are over the limit or not
             if (Cache::store(
-                config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
+                config('laravel-bug-watcher.throttleCacheDriver')
             )->has($this->globalThrottleCacheKey)
             ) {
                 // if we are over the limit return true since this should be throttled
                 if (Cache::store(
-                    config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
+                    config('laravel-bug-watcher.throttleCacheDriver')
                 )->get(
                     $this->globalThrottleCacheKey,
                     0
-                ) >= config('laravel-bug-watcher.ErrorEmail.globalThrottleLimit')
+                ) >= config('laravel-bug-watcher.globalThrottleLimit')
                 ) {
                     return true;
                 } else {
                     // else lets increment the cache key and return false since its not time to throttle yet
                     Cache::store(
-                        config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
+                        config('laravel-bug-watcher.throttleCacheDriver')
                     )->increment($this->globalThrottleCacheKey);
 
                     return false;
@@ -221,12 +220,12 @@ class ErrorHandler extends ExceptionHandler
             } else {
                 // we didn't find an item in cache lets put it in the cache
                 Cache::store(
-                    config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
+                    config('laravel-bug-watcher.throttleCacheDriver')
                 )->put(
                     $this->globalThrottleCacheKey,
                     1,
                     $this->getDateTimeMinutesFromNow(
-                        config('laravel-bug-watcher.ErrorEmail.globalThrottleDurationMinutes')
+                        config('laravel-bug-watcher.globalThrottleDurationMinutes')
                     )
                 );
 
@@ -246,7 +245,7 @@ class ErrorHandler extends ExceptionHandler
     protected function throttle(Throwable $exception)
     {
         // if throttling is turned off or its in the dont throttle list we won't throttle this exception
-        if (config('laravel-bug-watcher.ErrorEmail.throttle') == false ||
+        if (config('laravel-bug-watcher.throttle') == false ||
             $this->isInDontThrottleList($exception)
         ) {
             // report that we do not need to throttle
@@ -254,7 +253,7 @@ class ErrorHandler extends ExceptionHandler
         } else {
             // else lets check if its been reported within the last throttle period
             if (Cache::store(
-                config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
+                config('laravel-bug-watcher.throttleCacheDriver')
             )->has($this->getThrottleCacheKey($exception))
             ) {
                 // if its in the cache we need to throttle
@@ -262,12 +261,12 @@ class ErrorHandler extends ExceptionHandler
             } else {
                 // its not in the cache lets add it to the cache
                 Cache::store(
-                    config('laravel-bug-watcher.ErrorEmail.throttleCacheDriver')
+                    config('laravel-bug-watcher.throttleCacheDriver')
                 )->put(
                     $this->getThrottleCacheKey($exception),
                     true,
                     $this->getDateTimeMinutesFromNow(
-                        config('laravel-bug-watcher.ErrorEmail.throttleDurationMinutes')
+                        config('laravel-bug-watcher.throttleDurationMinutes')
                     )
                 );
 
@@ -333,7 +332,7 @@ class ErrorHandler extends ExceptionHandler
      */
     protected function isInDontThrottleList(Throwable $exception)
     {
-        $dontThrottleList = config('laravel-bug-watcher.ErrorEmail.dontThrottle');
+        $dontThrottleList = config('laravel-bug-watcher.dontThrottle');
 
         return $this->isInList($dontThrottleList, $exception);
     }
