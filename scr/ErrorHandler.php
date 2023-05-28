@@ -2,9 +2,7 @@
 
 namespace Vikasrinvi\LaravelBugWatcher;
 
-use App\Mail\WelcomeEmail;
 use Exception;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +13,8 @@ use Vikasrinvi\LaravelBugWatcher\Interface\BugWatcherInterface;
 use Vikasrinvi\LaravelBugWatcher\Interface\ClickupRepository;
 use Vikasrinvi\LaravelBugWatcher\Interface\TeamworkRepository;
 use Vikasrinvi\LaravelBugWatcher\Mail\ErrorMail;
+use Illuminate\Contracts\Container\Container;
+
 
 class ErrorHandler extends ExceptionHandler
 {
@@ -39,10 +39,10 @@ class ErrorHandler extends ExceptionHandler
 
     protected $clickupRepository;
 
-    public function __construct() {
+    public function __construct(Container $container) {
+        parent::__construct($container);
+        $platform = config('laravel-bug-watcher.platform'); 
 
-        $platform = config('laravel-bug-watcher.platform'); // Replace this with your actual condition
-        
         if ($platform =='team-work') {
             $this->clickupRepository = App::make(TeamworkRepository::class);
         } else {
@@ -53,12 +53,10 @@ class ErrorHandler extends ExceptionHandler
     }
     public function report(Throwable $exception)
     {
-
         if ($this->shouldMail($exception)) {
             // if we passed our validation lets mail the exception
             $this->mailException($exception);
         }
-        
         if($this->shouldCreateTask($exception)){
             $this->clickupRepository->createTask($exception);
         }
@@ -71,9 +69,6 @@ class ErrorHandler extends ExceptionHandler
 
     public function shouldCreateTask($exception)
     {
-        
-
-
         if(!config('laravel-bug-watcher.ClickUp.createTask') || !config('laravel-bug-watcher.ClickUp.token') || !config('laravel-bug-watcher.ClickUp.team_name') || !config('laravel-bug-watcher.ClickUp.folder_name') || !config('laravel-bug-watcher.ClickUp.list_name') ||
         // if the exception has already been mailed within the last throttle period
             $this->throttle($exception) ||
